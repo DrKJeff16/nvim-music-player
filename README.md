@@ -21,8 +21,8 @@ a **Telescope browser**.
 
 ## Screenshots
 
-![](/home/ricardo/nvim-music-player/assets/screenshoot_1_nvim_music_player.png)
-![](/home/ricardo/nvim-music-player/assets/screenshoot_2_nvim_music_player.png)
+![Screenshot 1](./assets/screenshoot_1_nvim_music_player.png)
+![Screenshot 2](./assets/screenshoot_2_nvim_music_player.png)
 
 <!-- ## Installation (Lazy.nvim) -->
 <!-- ```lua -->
