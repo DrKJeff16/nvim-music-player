@@ -32,3 +32,9 @@ a **Telescope browser**.
   "ricmonmol/nvim-music-player",
 }
 ```
+
+## Usage
+
+- `:MusicBrowse` - Search and browse music files
+- `:MusicPlay <path>` - Play music directly from path (e.g., `:MusicPlay /path/to/file.flac`)
+- `:MusicStop` - Stop music playback
