@@ -29,6 +29,6 @@ a **Telescope browser**.
 
 ```lua
 {
-  "ricardomontecinos/nvim-music-player",
+  "ricmonmol/nvim-music-player",
 }
 ```
