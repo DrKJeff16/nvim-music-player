@@ -6,14 +6,14 @@ M.browse = function()
 	telescope.find_files({
 		prompt_title = "🎵 Music Library",
 		cwd = vim.fn.expand("~/Music"),
-		find_command = { "fdfind", "--type", "f", "--extension", "mp3" },
-		attach_mappings = function(prompt_bufnr, map)
+		find_command = { "fdfind", "--type", "f", "--extension", "mp3", "--extension", "flac" },
+		attach_mappings = function(promp_bufnr, map)
 			local actions = require("telescope.actions")
-			local action_state = require("telescope.actions.state")
+			local actions_state = require("telescope.actions.state")
 
 			map("i", "<CR>", function()
-				local selection = action_state.get_selected_entry()
-				actions.close(prompt_bufnr)
+				local selection = actions_state.get_selected_entry()
+				actions.close(promp_bufnr)
 
 				if selection and selection.path then
 					vim.cmd("MusicPlay " .. vim.fn.fnameescape(selection.path))
@@ -26,3 +26,4 @@ M.browse = function()
 end
 
 return M
+

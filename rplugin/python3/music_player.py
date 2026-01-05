@@ -12,7 +12,9 @@ class MusicPlayer:
 
     @pynvim.command("MusicPlay", nargs=1)
     def play(self, args):
-        path = os.path.expanduser(args[0])
+        path_from_lua = args[0]
+        actual_path = path_from_lua.replace('\\ ', ' ')
+        path = os.path.expanduser(actual_path)
 
         if not os.path.exists(path):
             self.nvim.err_write(f"❌ File not found: {path}\n")
