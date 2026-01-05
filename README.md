@@ -6,7 +6,7 @@ a **Telescope browser**.
 ## Features
 
 - Browse `~/Music` with Telescope
-- Play MP3 files inside Neovim
+- Play FLAC and mp3 files inside Neovim
 - Control playback via commands
 - Works with LazyVim
 
