@@ -16,20 +16,34 @@ class MusicPlayer:
     ----------
     nvim : pynvim.Nvim
         The Neovim instance.
+
+    Attributes
+    ----------
+    nvim : pynvim.Nvim
+        The Neovim instance.
+    file : str or None
+        The currently playing file path.
+    process : subprocess.Popen or None
+        The ``mpv`` process.
     """
 
     nvim: pynvim.Nvim
     process: Popen | None
+    file: str | None
+    cmd: str | None
 
     def __init__(self, nvim: pynvim.Nvim):
+        self.cmd: str | None = None
         self.nvim: pynvim.Nvim = nvim
         self.process: Popen | None = None
+        self.file: str | None = None
         self.nvim.out_write("🎵 nvim-music-player loaded\n")
 
     @pynvim.command("MusicPlay", nargs=1, complete="file")
     def play(self, args: Tuple[str]) -> NoReturn:
         """Start playing the given music file."""
-        if not which("mpv"):
+        self.cmd = which("mpv")
+        if self.cmd is None:
             self.nvim.err_write("Unable to find mpv in PATH\n")
             return
 
@@ -38,10 +52,15 @@ class MusicPlayer:
             self.nvim.err_write(f"❌ File not found: {path}\n")
             return
 
+        if self.file is not None and self.file == path:
+            self.stop()
+            return
+
+        self.file = path
         if self.process is not None:
             self.process.terminate()
 
-        self.process = Popen(["mpv", "--no-video", path], stdout=DEVNULL, stderr=DEVNULL)
+        self.process = Popen([self.cmd, "--no-video", path], stdout=DEVNULL, stderr=DEVNULL)
         self.nvim.out_write(f"🎶 Playing: {path}\n")
 
     @pynvim.command("MusicStop", nargs=0)
@@ -50,6 +69,7 @@ class MusicPlayer:
         if self.process is not None:
             self.process.terminate()
             self.process = None
+            self.file = None
             self.nvim.out_write("⏹ Music stopped\n")
             return
 
