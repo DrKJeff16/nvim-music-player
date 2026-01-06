@@ -26,4 +26,4 @@ M.browse = function()
 end
 
 return M
-
+-- vim: set ts=4 sts=4 sw=0 noet ai si sta:
