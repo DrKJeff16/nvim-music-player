@@ -30,6 +30,7 @@ a **Telescope browser**.
 ```lua
 {
   "ricmonmol/nvim-music-player",
+  build = "UpdateRemotePlugins", -- REQUIRED
 }
 ```
 
