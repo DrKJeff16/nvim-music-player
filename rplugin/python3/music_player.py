@@ -1,5 +1,5 @@
 """Python code for ``nvim-music-player``."""
-from os.path import exists, expanduser
+from os.path import exists, realpath
 from shutil import which
 from subprocess import DEVNULL, Popen
 from typing import NoReturn, Tuple
@@ -33,7 +33,7 @@ class MusicPlayer:
             self.nvim.err_write("Unable to find mpv in PATH\n")
             return
 
-        path = expanduser(args[0].replace('\\ ', ' '))
+        path: str = realpath(args[0].replace('\\ ', ' '))
         if not exists(path):
             self.nvim.err_write(f"❌ File not found: {path}\n")
             return
