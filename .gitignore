@@ -1,0 +1,7 @@
+__pycache__/
+.mypy_ignore/
+.ropeproject/
+.venv
+venv
+uv.lock
+Pipfile.lock
