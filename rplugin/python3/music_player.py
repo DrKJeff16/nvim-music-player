@@ -33,23 +33,21 @@ class MusicPlayer:
     cmd: str | None
 
     def __init__(self, nvim: pynvim.Nvim):
-        self.cmd: str | None = None
+        self.cmd: str | None = which("mpv")
         self.nvim: pynvim.Nvim = nvim
         self.process: Popen | None = None
         self.file: str | None = None
-        self.nvim.out_write("🎵 nvim-music-player loaded\n")
 
     @pynvim.command("MusicPlay", nargs=1, complete="file")
     def play(self, args: Tuple[str]) -> NoReturn:
         """Start playing the given music file."""
-        self.cmd = which("mpv")
         if self.cmd is None:
-            self.nvim.err_write("Unable to find mpv in PATH\n")
+            self.nvim.err_write("🎵 nvim-music-player: Unable to find mpv in PATH\n")
             return
 
         path: str = realpath(args[0].replace('\\ ', ' '))
         if not exists(path):
-            self.nvim.err_write(f"❌ File not found: {path}\n")
+            self.nvim.err_write(f"🎵 nvim-music-player: ❌ File not found: {path}\n")
             return
 
         if self.file is not None and self.file == path:
@@ -61,18 +59,26 @@ class MusicPlayer:
             self.process.terminate()
 
         self.process = Popen([self.cmd, "--no-video", path], stdout=DEVNULL, stderr=DEVNULL)
-        self.nvim.out_write(f"🎶 Playing: {path}\n")
+        self.nvim.out_write(f"🎵 nvim-music-player: 🎶 Playing: {path}\n")
 
-    @pynvim.command("MusicStop", nargs=0)
-    def stop(self) -> NoReturn:
-        """Stop the music player."""
+    @pynvim.command("MusicStop", nargs=0, bang=True)
+    def stop(self, bang: bool) -> NoReturn:
+        """
+        Stop the music player.
+
+        Parameters
+        ----------
+        bang : bool
+            Whether the command was called with a bang ``!`` or not.
+        """
         if self.process is not None:
             self.process.terminate()
             self.process = None
             self.file = None
-            self.nvim.out_write("⏹ Music stopped\n")
+            self.nvim.out_write("🎵 nvim-music-player: ⏹ Music stopped\n")
             return
 
-        self.nvim.out_write("Music already stopped\n")
+        if not bang:
+            self.nvim.out_write("🎵 nvim-music-player: Music already stopped\n")
 
 # vim: set ts=4 sts=4 sw=4 et ai si sta:
