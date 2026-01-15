@@ -42,7 +42,7 @@ class MusicPlayer:
     def play(self, args: Tuple[str]) -> NoReturn:
         """Start playing the given music file."""
         if self.cmd is None:
-            self.nvim.err_write("🎵 nvim-music-player: Unable to find mpv in PATH\n")
+            self.nvim.err_write("🎵 nvim-music-player: Unable to find `mpv` in PATH\n")
             return
 
         path: str = realpath(args[0].replace('\\ ', ' '))
@@ -62,23 +62,24 @@ class MusicPlayer:
         self.nvim.out_write(f"🎵 nvim-music-player: 🎶 Playing: {path}\n")
 
     @pynvim.command("MusicStop", nargs=0, bang=True)
-    def stop(self, bang: bool) -> NoReturn:
+    def stop(self, bang: bool = False) -> NoReturn:
         """
         Stop the music player.
 
         Parameters
         ----------
-        bang : bool
-            Whether the command was called with a bang ``!`` or not.
+        bang : bool, optional, default=False
+            Whether the command was called with a bang (``!``) or not.
         """
-        if self.process is not None:
-            self.process.terminate()
-            self.process = None
-            self.file = None
-            self.nvim.out_write("🎵 nvim-music-player: ⏹ Music stopped\n")
+        if self.process is None:
+            if not bang:
+                self.nvim.out_write("🎵 nvim-music-player: Music already stopped\n")
+
             return
 
-        if not bang:
-            self.nvim.out_write("🎵 nvim-music-player: Music already stopped\n")
+        self.process.terminate()
+        self.process = None
+        self.file = None
+        self.nvim.out_write("🎵 nvim-music-player: ⏹ Music stopped\n")
 
 # vim: set ts=4 sts=4 sw=4 et ai si sta:
