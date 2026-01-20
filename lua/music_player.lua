@@ -12,6 +12,16 @@ function M.browse()
 		return
 	end
 
+	for _, cmd in ipairs({ "MusicPlay", "MusicStop" }) do
+		if not (vim.cmd[cmd] and vim.is_callable(vim.cmd[cmd])) then
+			vim.notify(
+				("`:%s` is unavailable!\nRun `:UpdateRemotePlugins` and restart."):format(cmd),
+				vim.log.levels.ERROR
+			)
+			return
+		end
+	end
+
 	require("telescope.builtin").find_files({
 		prompt_title = "🎵 Music Library",
 		cwd = vim.fn.expand("~/Music"),
